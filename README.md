@@ -1,14 +1,25 @@
 # dsh-plugin-notify
 
-当 dsh Web GUI 里的 agent **不再运行**时，弹一条 Windows 原生 Toast。适用于你发起绘画/生成等长任务后离开电脑、希望"完成 / 停止 / 出错 / 在等你选择"时被叫回来的场景。
+> ⚠️ **AI 生成项目声明**
+>
+> 本项目（代码、脚本、文档）**由 AI 辅助生成**，仅用于学习和参考。
+> 使用前请自行阅读、审查并充分测试代码，按需修改后再部署到你的环境。
 
-- 通知**常驻**（`scenario="reminder"`，直到你手动关闭）；
-- 用 dsh 鲸鱼 logo 作为通知图标；
-- 通知正文标注**「工作区 · 会话」位置行**：一眼看出是哪个工作区的哪个会话完成了；
-- **纯提示**：点击通知不触发任何动作；
-- **系统托盘图标**：任务栏右下角常驻一个 dsh 鲸鱼小图标，表示后台运行中（双击/右键「打开 dsh」；右键「关闭进程」终止 dsh 后台；dsh 退出后图标自动消失）。
+dsh Web GUI 的 Windows 通知插件：当 agent **不再运行**时（任务完成 / 被停止 / 出错 / 停下来等你选择 / 会话被关闭），弹一条 Windows 原生 Toast 提醒你回来看结果。适合发起绘画、生成等长任务后离开电脑的场景。
 
-纯 host 端插件，零运行时依赖、零构建步骤。
+- **纯 host 端插件**：零运行时依赖、零构建步骤，普通 ESM；
+- **通知常驻**：`scenario="reminder"`，直到你手动关闭；
+- **位置标注**：通知正文显示 `工作区「…」 · 会话「…」`，一眼看出是哪个工作区的哪个会话；
+- **系统托盘**：任务栏右下角常驻 dsh 鲸鱼图标，双击/右键「打开 dsh」、右键「关闭进程」终止 dsh 后台，dsh 退出后图标自动消失。
+
+## 目录
+
+- [触发条件](#触发条件)
+- [安装](#安装)
+- [配置](#配置config均有默认值)
+- [测试](#测试)
+- [排障](#排障)
+- [相关文档](#相关文档)
 
 ## 触发条件
 
@@ -21,26 +32,31 @@
 | agent 停下来让你选择 | 未配对的 `ask_user_question` 工具调用 | 「dsh · 在等你选择」 |
 | 运行中的会话被关闭 | `agent/disposed` | 「dsh · 会话已关闭」 |
 
-> 每条通知正文还会带一行**位置标注**：`工作区「…」 · 会话「…」`。工作区取
-> `workspaceRegistry` 中该会话的归属标题（兜底用会话 cwd 的目录名），会话取
-> sidebar 显示的会话标题（无标题时兜底用会话 id 短号，如 `#a1b2c3d4`）。两个
-> 服务都不可用时该行自动省略。
+> **位置标注说明**：每条通知正文带一行 `工作区「…」 · 会话「…」`。
+> 工作区取 `workspaceRegistry` 中该会话的归属标题（兜底用会话 cwd 的目录名），
+> 会话取 sidebar 显示的会话标题（无标题时兜底用会话 id 短号，如 `#a1b2c3d4`）。
+> 两个服务都不可用时该行自动省略，不影响通知。
 
 ## 安装
 
 1. 链接进 web profile 依赖（编辑 `C:\Users\18303\.dsh\profiles\web\package.json`）：
+
    ```jsonc
    "dependencies": {
      // ...已有依赖...
      "@dsh-external/dsh-plugin-notify": "link:C:/Users/18303/Desktop/dsh-plugin-notify"
    }
    ```
+
 2. 在 profile 目录执行安装：
+
    ```powershell
    cd C:\Users\18303\.dsh\profiles\web
    pnpm install        # 或：dsh plugin --profile web install
    ```
+
 3. 注册插件（编辑 `C:\Users\18303\.dsh\profiles\web\cordis.patch.yml`，追加）：
+
    ```yaml
    - insert:
        - id: dsh-plugin-notify
@@ -48,7 +64,8 @@
          config:
            cooldownMs: 10000
    ```
-4. **重启 `dsh web`**。重启后任务栏右下角会出现 dsh 鲸鱼小图标，说明已加载。
+
+4. **重启 `dsh web`**。重启后任务栏右下角出现 dsh 鲸鱼小图标即加载成功。
 
 ## 配置（`config`，均有默认值）
 
@@ -74,7 +91,7 @@
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/smoke-notice.ps1
 ```
 
-插件逻辑端到端自测（无需 dsh、无需重启，弹「等待选择/任务完成/任务已停止」三条中文 Toast）：
+插件逻辑端到端自测（无需 dsh、无需重启，弹「等待选择 / 任务完成 / 任务已停止」三条中文 Toast）：
 
 ```powershell
 node scripts/test-harness.mjs
@@ -86,4 +103,6 @@ node scripts/test-harness.mjs
 - **图标不显示**：确认 `assets/dsh.png`（通知）与 `assets/dsh.ico`（托盘）随插件目录一起存在。
 - **中文乱码**：经环境变量（UTF-16）与 `-EncodedCommand`（UTF-16LE base64）传参，不应乱码。
 
-详见 `设计文稿.md`。
+## 相关文档
+
+- `设计文稿.md`：设计思路、对 dsh 源码的调研结论、实现细节与边界情况。
