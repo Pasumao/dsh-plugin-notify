@@ -19,6 +19,21 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 const handlers = new Map()
 const ctx = {
   agents: { list: () => [] },
+  /** mock workspaceRegistry：test-session 归属「dsh-plugin-notify」工作区。 */
+  workspaceRegistry: {
+    list: () => [
+      {
+        id: 'ws-1',
+        path: 'C:\\Users\\18303\\Desktop\\dsh-plugin-notify',
+        title: 'dsh-plugin-notify',
+        sessionIds: ['test-session'],
+      },
+    ],
+  },
+  /** mock sessionTitle：返回 sidebar 标题。 */
+  sessionTitle: {
+    get: (s) => (s?.id === 'test-session' ? { title: '画一只赛博朋克猫' } : undefined),
+  },
   on(name, cb) {
     if (!handlers.has(name)) handlers.set(name, [])
     handlers.get(name).push(cb)
@@ -34,13 +49,17 @@ const ctx = {
   },
 }
 
-mod.apply(ctx, { cooldownMs: 0, summaryMaxChars: 40 })
+// tray: false —— 测试只验证通知管道，不启动常驻托盘图标（否则 node 进程不会退出）。
+mod.apply(ctx, { cooldownMs: 0, summaryMaxChars: 40, tray: false })
 
 const emit = (name, ...args) => {
   for (const cb of handlers.get(name) ?? []) cb(...args)
 }
 
-const session = { id: 'test-session', header: {} } // 无 delegationDepth = 根会话
+const session = {
+  id: 'test-session',
+  header: { cwd: 'C:\\Users\\18303\\Desktop\\dsh-plugin-notify' }, // 无 delegationDepth = 根会话
+}
 const agent = { id: 'test-session', status: 'running', session }
 
 function startTurn() {
