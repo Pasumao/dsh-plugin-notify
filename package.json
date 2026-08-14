@@ -1,0 +1,19 @@
+{
+  "name": "@dsh-external/dsh-plugin-notice",
+  "description": "Windows toast + system-tray notifications for dsh: pop a toast when the agent stops running (click opens the dsh page).",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "smoke": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/smoke-notice.ps1"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "^4.0.1"
+  },
+  "license": "MIT"
+}
