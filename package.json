@@ -10,8 +10,16 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "smoke": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/smoke-notice.ps1"
+    "smoke": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/smoke-notice.ps1",
+    "pack": "npm pack"
   },
+  "files": [
+    "lib",
+    "assets",
+    "scripts",
+    "README.md",
+    "设计文稿.md"
+  ],
   "peerDependencies": {
     "@deepseek-ai/cordis": "^4.0.1"
   },

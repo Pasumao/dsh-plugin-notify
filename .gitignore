@@ -2,3 +2,6 @@
 Thumbs.db
 .DS_Store
 desktop.ini
+
+# Packed release artifacts (built via `npm pack`, uploaded to GitHub Releases)
+*.tgz
