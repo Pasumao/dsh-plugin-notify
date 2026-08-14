@@ -39,33 +39,51 @@ dsh Web GUI 的 Windows 通知插件：当 agent **不再运行**时（任务完
 
 ## 安装
 
-1. 链接进 web profile 依赖（编辑 `C:\Users\18303\.dsh\profiles\web\package.json`）：
+本插件是标准的 DSH **bundle**（`package.json` 声明 `dsh.bundle.patch`，包内自带
+`cordis.patch.yml`），安装后会自动加入 profile 的 bundle 层，无需手动写补丁。
+
+### 方式一：npm（推荐）
+
+```powershell
+dsh plugin --profile web add dsh-notify
+```
+
+### 方式二：GitHub 直接安装（无需 npm）
+
+```powershell
+dsh plugin --profile web add github:Pasumao/dsh-plugin-notify
+```
+
+> git 源插件若带构建脚本，pnpm 会要求先在 `profiles\web\pnpm-workspace.yaml` 的
+> `allowBuilds` 里放行对应包名；本项目零构建（无 prepare 脚本），一般无需配置。
+
+### 方式三：本地路径（开发 / 私有测试）
+
+```powershell
+dsh plugin --profile web add C:/Users/18303/Desktop/dsh-plugin-notify
+```
+
+### 方式四：手动 link（可选，等同旧版流程）
+
+1. 在 `C:\Users\18303\.dsh\profiles\web\package.json` 的 dependencies 加：
 
    ```jsonc
    "dependencies": {
      // ...已有依赖...
-     "@dsh-external/dsh-plugin-notify": "link:C:/Users/18303/Desktop/dsh-plugin-notify"
+     "dsh-notify": "link:C:/Users/18303/Desktop/dsh-plugin-notify"
    }
    ```
 
-2. 在 profile 目录执行安装：
+2. profile 目录执行安装：
 
    ```powershell
    cd C:\Users\18303\.dsh\profiles\web
-   pnpm install        # 或：dsh plugin --profile web install
+   pnpm install
    ```
 
-3. 注册插件（编辑 `C:\Users\18303\.dsh\profiles\web\cordis.patch.yml`，追加）：
-
-   ```yaml
-   - insert:
-       - id: dsh-plugin-notify
-         name: '@dsh-external/dsh-plugin-notify'
-         config:
-           cooldownMs: 10000
-   ```
-
-4. **重启 `dsh web`**。重启后任务栏右下角出现 dsh 鲸鱼小图标即加载成功。
+安装完成后 **重启 `dsh web`**：任务栏右下角出现 dsh 鲸鱼小图标即加载成功。
+如需调整通知行为，在 profile 的 `cordis.patch.yml` 按 id 覆盖 `config` 即可
+（例如 `- id: dsh-plugin-notify` + `config: { cooldownMs: 5000 }`）。
 
 ## 配置（`config`，均有默认值）
 
