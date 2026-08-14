@@ -1,5 +1,5 @@
 /**
- * test-harness.mjs — dsh-plugin-notice 端到端测试（无需 dsh、无需重启）。
+ * test-harness.mjs — dsh-plugin-notify 端到端测试（无需 dsh、无需重启）。
  *
  * 用带事件记录的 mock ctx 直接驱动插件处理器，验证「等待选择 / 任务完成 /
  * 任务被停止」三条链路都会真实弹出 Windows Toast（含中文渲染）。事件载荷

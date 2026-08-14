@@ -1,5 +1,5 @@
 {
-  "name": "@dsh-external/dsh-plugin-notice",
+  "name": "@dsh-external/dsh-plugin-notify",
   "description": "Windows toast + system-tray notifications for dsh: pop a toast when the agent stops running (click opens the dsh page).",
   "version": "0.1.0",
   "private": true,

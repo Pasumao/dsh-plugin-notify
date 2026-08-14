@@ -1,4 +1,4 @@
-# dsh-plugin-notice
+# dsh-plugin-notify
 
 当 dsh Web GUI 里的 agent **不再运行**时，弹一条 Windows 原生 Toast。适用于你发起绘画/生成等长任务后离开电脑、希望"完成 / 停止 / 出错 / 在等你选择"时被叫回来的场景。
 
@@ -26,7 +26,7 @@
    ```jsonc
    "dependencies": {
      // ...已有依赖...
-     "@dsh-external/dsh-plugin-notice": "link:C:/Users/18303/Desktop/dsh-plugin-notice"
+     "@dsh-external/dsh-plugin-notify": "link:C:/Users/18303/Desktop/dsh-plugin-notify"
    }
    ```
 2. 在 profile 目录执行安装：
@@ -37,8 +37,8 @@
 3. 注册插件（编辑 `C:\Users\18303\.dsh\profiles\web\cordis.patch.yml`，追加）：
    ```yaml
    - insert:
-       - id: dsh-plugin-notice
-         name: '@dsh-external/dsh-plugin-notice'
+       - id: dsh-plugin-notify
+         name: '@dsh-external/dsh-plugin-notify'
          config:
            cooldownMs: 10000
    ```
