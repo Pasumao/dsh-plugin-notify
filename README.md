@@ -1,126 +1,40 @@
-# dsh-plugin-notify
+# dsh-notify
 
-> ⚠️ **AI 生成项目声明**
->
-> 本项目（代码、脚本、文档）**由 AI 辅助生成**，仅用于学习和参考。
-> 使用前请自行阅读、审查并充分测试代码，按需修改后再部署到你的环境。
+> ⚠️ **AI 生成项目**：代码与文档由 AI 辅助生成，仅供学习参考，使用前请自行审查。
 
-dsh Web GUI 的 Windows 通知插件：当 agent **不再运行**时（任务完成 / 被停止 / 出错 / 停下来等你选择 / 会话被关闭），弹一条 Windows 原生 Toast 提醒你回来看结果。适合发起绘画、生成等长任务后离开电脑的场景。
-
-- **纯 host 端插件**：零运行时依赖、零构建步骤，普通 ESM；
-- **通知常驻**：`scenario="reminder"`，直到你手动关闭；
-- **位置标注**：通知正文显示 `工作区「…」 · 会话「…」`，一眼看出是哪个工作区的哪个会话；
-- **系统托盘**：任务栏右下角常驻 dsh 鲸鱼图标，双击/右键「打开 dsh」、右键「关闭进程」终止 dsh 后台，dsh 退出后图标自动消失。
-
-## 目录
-
-- [触发条件](#触发条件)
-- [安装](#安装)
-- [配置](#配置config均有默认值)
-- [测试](#测试)
-- [排障](#排障)
-- [相关文档](#相关文档)
-
-## 触发条件
-
-| 场景 | 信号 | 通知 |
-|---|---|---|
-| 任务正常完成 | `agent/status` running→idle + `turn/end: completed` | 「dsh · 任务完成」 |
-| 你点了停止 / 被中止 | `turn/end: aborted` | 「dsh · 任务已停止」 |
-| 执行出错 | `turn/end: error` | 「dsh · 任务出错」 |
-| 达到输出上限 | `turn/end: max-tokens` | 「dsh · 达到输出上限」 |
-| agent 停下来让你选择 | 未配对的 `ask_user_question` 工具调用 | 「dsh · 在等你选择」 |
-| 运行中的会话被关闭 | `agent/disposed` | 「dsh · 会话已关闭」 |
-
-> **位置标注说明**：每条通知正文带一行 `工作区「…」 · 会话「…」`。
-> 工作区取 `workspaceRegistry` 中该会话的归属标题（兜底用会话 cwd 的目录名），
-> 会话取 sidebar 显示的会话标题（无标题时兜底用会话 id 短号，如 `#a1b2c3d4`）。
-> 两个服务都不可用时该行自动省略，不影响通知。
+dsh 的 Windows 通知插件：agent 不再运行时（完成 / 停止 / 出错 / 等你选择 / 会话关闭）弹原生 Toast 提醒，正文标注「工作区 · 会话」，托盘常驻鲸鱼图标。
 
 ## 安装
-
-本插件是标准的 DSH **bundle**（`package.json` 声明 `dsh.bundle.patch`，包内自带
-`cordis.patch.yml`），安装后会自动加入 profile 的 bundle 层，无需手动写补丁。
-
-### 方式一：npm（推荐）
 
 ```powershell
 dsh plugin --profile web add dsh-notify
 ```
 
-### 方式二：GitHub 直接安装（无需 npm）
+GitHub 安装：`dsh plugin --profile web add github:Pasumao/dsh-plugin-notify`
 
-```powershell
-dsh plugin --profile web add github:Pasumao/dsh-plugin-notify
-```
+装完重启 `dsh web`，任务栏出现鲸鱼图标即生效。
 
-> git 源插件若带构建脚本，pnpm 会要求先在 `profiles\web\pnpm-workspace.yaml` 的
-> `allowBuilds` 里放行对应包名；本项目零构建（无 prepare 脚本），一般无需配置。
+## 触发时机
 
-### 方式三：本地路径（开发 / 私有测试）
+任务完成、被中止、执行出错、达到输出上限、停下来等你选择、运行中的会话被关闭。
 
-```powershell
-dsh plugin --profile web add C:/Users/18303/Desktop/dsh-plugin-notify
-```
+## 配置
 
-### 方式四：手动 link（可选，等同旧版流程）
-
-1. 在 `C:\Users\18303\.dsh\profiles\web\package.json` 的 dependencies 加：
-
-   ```jsonc
-   "dependencies": {
-     // ...已有依赖...
-     "dsh-notify": "link:C:/Users/18303/Desktop/dsh-plugin-notify"
-   }
-   ```
-
-2. profile 目录执行安装：
-
-   ```powershell
-   cd C:\Users\18303\.dsh\profiles\web
-   pnpm install
-   ```
-
-安装完成后 **重启 `dsh web`**：任务栏右下角出现 dsh 鲸鱼小图标即加载成功。
-如需调整通知行为，在 profile 的 `cordis.patch.yml` 按 id 覆盖 `config` 即可
-（例如 `- id: dsh-plugin-notify` + `config: { cooldownMs: 5000 }`）。
-
-## 配置（`config`，均有默认值）
+在 profile 的 `cordis.patch.yml` 按 id `dsh-plugin-notify` 覆盖 config。常用项：
 
 | key | 默认 | 说明 |
 |---|---|---|
-| `enabled` | `true` | 总开关 |
-| `tray` | `true` | 系统托盘图标开关（`false` 关闭） |
-| `rootsOnly` | `true` | 仅根会话通知；子代理不刷屏 |
-| `notifyFinished` / `notifyAborted` / `notifyError` / `notifyWaiting` / `notifyDisposed` | 全 `true` | 分类型开关 |
-| `cooldownMs` | `10000` | 同一会话、同一类型两次通知最小间隔（毫秒） |
-| `titlePrefix` | `'dsh'` | 通知标题前缀（形如 `dsh · 任务完成`） |
-| `iconPath` | 内置 `assets/dsh.png` | 通知 logo PNG 路径；设为空串 `''` 则不显示自定义图标 |
-| `webUrl` | `http://127.0.0.1:3080` | dsh 页面地址（点击通知/托盘「打开 dsh」跳转的地址） |
-| `aumid` | PowerShell 5.1 的 AUMID | Toast 归属的 AppUserModelID（一般无需改） |
-| `summaryMaxChars` | `40` | 任务摘要截断长度 |
-| `powershellPath` | 自动 | 覆盖 PowerShell 5.1 路径 |
+| `cooldownMs` | `10000` | 同会话同类型两次通知的最小间隔（毫秒） |
+| `rootsOnly` | `true` | 仅根会话通知，子代理不刷屏 |
+| `tray` | `true` | 托盘图标开关 |
+| `titlePrefix` | `'dsh'` | 通知标题前缀 |
 
 ## 测试
 
-通知管道单测（英文 Toast）：
-
 ```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/smoke-notice.ps1
-```
-
-插件逻辑端到端自测（无需 dsh、无需重启，弹「等待选择 / 任务完成 / 任务已停止」三条中文 Toast）：
-
-```powershell
-node scripts/test-harness.mjs
+node scripts/test-harness.mjs   # 弹三条真实 Toast 自测
 ```
 
 ## 排障
 
-- **Toast 不出现**：确认 Windows「通知与操作」里允许 PowerShell 显示通知；首次加载 WinRT 模块稍慢属正常。
-- **图标不显示**：确认 `assets/dsh.png`（通知）与 `assets/dsh.ico`（托盘）随插件目录一起存在。
-- **中文乱码**：经环境变量（UTF-16）与 `-EncodedCommand`（UTF-16LE base64）传参，不应乱码。
-
-## 相关文档
-
-- `设计文稿.md`：设计思路、对 dsh 源码的调研结论、实现细节与边界情况。
+Toast 不出现：检查 Windows「通知与操作」是否允许 PowerShell 显示通知。
