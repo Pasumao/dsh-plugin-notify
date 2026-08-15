@@ -1,7 +1,7 @@
 {
   "name": "dsh-notify",
   "description": "DeepSeek Harness (dsh) Windows notification plugin: a native toast when the agent stops running (finished / aborted / error / waiting for your choice / session closed), plus a system-tray icon. Pure host-side, zero dependencies, zero build.",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "type": "module",
   "main": "lib/index.js",
   "exports": {

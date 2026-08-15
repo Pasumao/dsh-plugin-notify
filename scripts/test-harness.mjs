@@ -30,10 +30,7 @@ const ctx = {
       },
     ],
   },
-  /** mock sessionTitle：返回 sidebar 标题。 */
-  sessionTitle: {
-    get: (s) => (s?.id === 'test-session' ? { title: '画一只赛博朋克猫' } : undefined),
-  },
+  // 故意不提供 sessionTitle 服务：验证「直接折会话日志 session/title」路径。
   on(name, cb) {
     if (!handlers.has(name)) handlers.set(name, [])
     handlers.get(name).push(cb)
@@ -59,6 +56,8 @@ const emit = (name, ...args) => {
 const session = {
   id: 'test-session',
   header: { cwd: 'C:\\Users\\18303\\Desktop\\dsh-plugin-notify' }, // 无 delegationDepth = 根会话
+  // 会话日志（与真实 dsh Session.events 同形）：含 session/title 事件。
+  events: [{ type: 'session/title', data: { title: '画一只赛博朋克猫' } }],
 }
 const agent = { id: 'test-session', status: 'running', session }
 
