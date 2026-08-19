@@ -24,7 +24,7 @@ const ctx = {
     list: () => [
       {
         id: 'ws-1',
-        path: 'C:\\Users\\18303\\Desktop\\dsh-plugin-notify',
+        path: 'D:\\dsh\\plugins\\dsh-plugin-notify',
         title: 'dsh-plugin-notify',
         sessionIds: ['test-session'],
       },
@@ -55,7 +55,7 @@ const emit = (name, ...args) => {
 
 const session = {
   id: 'test-session',
-  header: { cwd: 'C:\\Users\\18303\\Desktop\\dsh-plugin-notify' }, // 无 delegationDepth = 根会话
+  header: { cwd: 'D:\\dsh\\plugins\\dsh-plugin-notify' }, // 无 delegationDepth = 根会话
   // 会话日志（与真实 dsh Session.events 同形）：含 session/title 事件。
   events: [{ type: 'session/title', data: { title: '画一只赛博朋克猫' } }],
 }

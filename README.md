@@ -1,8 +1,12 @@
 # dsh-notify
 
-> ⚠️ **AI 生成项目**：代码与文档由 AI 辅助生成，仅供学习参考，使用前请自行审查。
+![npm version](https://img.shields.io/npm/v/dsh-notify)
+![License](https://img.shields.io/github/license/Pasumao/dsh-plugin-notify)
+![AI Assisted](https://img.shields.io/badge/AI-Assisted-8A2BE2)
 
-dsh 的 Windows 通知插件：agent 不再运行时（完成 / 停止 / 出错 / 等你选择 / 会话关闭）弹原生 Toast 提醒，正文标注「工作区 · 会话」，托盘常驻鲸鱼图标。
+**唯一带系统托盘的 Windows 原生通知插件**：agent 不再运行时（完成 / 停止 / 出错 / 等你选择 / 会话关闭）自动弹原生 Toast，正文标注「工作区 · 会话」，任务栏托盘常驻鲸鱼图标——跑长任务时切走窗口，瞄一眼托盘就知道跑完了没。
+
+零运行时依赖、零构建，`dsh plugin add` 一条命令装完即用。
 
 ## 安装
 
