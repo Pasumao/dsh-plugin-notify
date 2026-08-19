@@ -42,3 +42,12 @@ node scripts/test-harness.mjs   # 弹三条真实 Toast 自测
 ## 排障
 
 Toast 不出现：检查 Windows「通知与操作」是否允许 PowerShell 显示通知。
+
+## AI 生成声明
+
+代码与文档由 AI 辅助生成（DeepSeek Harness），均经人工审查与实机验证
+（`scripts/test-harness.mjs` 弹真实 Toast 自测）。
+
+## License
+
+[MIT](./LICENSE)
