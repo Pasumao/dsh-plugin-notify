@@ -14,7 +14,8 @@
     "scripts",
     "cordis.patch.yml",
     "README.md",
-    "设计文稿.md"
+    "设计文稿.md",
+    "LICENSE"
   ],
   "scripts": {
     "smoke": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/smoke-notice.ps1",

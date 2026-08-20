@@ -8,6 +8,20 @@
 
 零运行时依赖、零构建，`dsh plugin add` 一条命令装完即用。
 
+## 功能
+
+- **Windows 原生 Toast 通知**：agent 不再运行时（完成 / 停止 / 出错 / 达到输出上限 / 等你选择 / 会话关闭）自动弹系统通知，正文标注「工作区 · 会话」，一眼知道哪个会话跑完了；
+- **系统托盘常驻图标**：任务栏托盘鲸鱼图标常驻，右键菜单可唤起 dsh web 页面 / 退出后台（竞品均明确不做托盘，本插件是 dsh 生态唯一）；
+- **防刷屏**：`rootsOnly` 默认仅根会话通知，子代理不刷屏；`cooldownMs` 同会话同类型两次通知最小间隔；
+- **零运行时依赖、零构建**，`dsh plugin add` 一条命令装完即用。
+
+## 使用场景
+
+- **跑长任务时切走窗口**：LLM 长生成 / 批处理跑着，切到别的应用，任务结束托盘弹通知，瞄一眼就知道结果；
+- **挂机批量任务**：一晚上跑多轮任务，全部结束后收到 Toast，不用守着页面；
+- **会话多开**：同时跑多个工作区会话，通知正文带「工作区 · 会话」标注，不会搞混；
+- **子代理观察**：希望只关注根会话结果时保持 `rootsOnly: true` 默认值，需要观察子代理时再关掉。
+
 ## 安装
 
 ```powershell
@@ -15,6 +29,15 @@ dsh plugin --profile web add dsh-notify
 ```
 
 GitHub 安装：`dsh plugin --profile web add github:Pasumao/dsh-plugin-notify`
+
+源码安装（本地开发 / 调试）：
+
+```bash
+git clone https://github.com/Pasumao/dsh-plugin-notify.git
+cd dsh-plugin-notify
+npm install
+# 以 link: 方式挂载进 profile（包名 dsh-notify）
+```
 
 装完重启 `dsh web`，任务栏出现鲸鱼图标即生效。
 
@@ -38,6 +61,14 @@ GitHub 安装：`dsh plugin --profile web add github:Pasumao/dsh-plugin-notify`
 ```powershell
 node scripts/test-harness.mjs   # 弹三条真实 Toast 自测
 ```
+
+## 常见问题
+
+- **收不到通知？** 检查 Windows「设置 → 系统 → 通知」是否允许 PowerShell 显示通知，
+  以及是否处于专注助手 / 勿扰时段；
+- **只想根会话通知？** 保持默认 `rootsOnly: true`；需要观察子代理时再改为 `false`；
+- **通知太频繁？** 调大 `cooldownMs`（默认 10000ms）即可；
+- **托盘图标不见了？** 重启 dsh web；仍无则检查 `tray: true` 配置项是否被覆盖。
 
 ## 排障
 
