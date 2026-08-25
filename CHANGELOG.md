@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.1.5] - 2026-08-25
+
+- 相关插件段新增 dsh-plugin-windows-guard（Windows 环境防坑守则 skill 插件，互相引流）。
+
+
 ## [0.1.4] - 2026-08-21
 
 - README 新增「相关插件」互相引用段（列出同系列已发布插件，npm / GitHub 链接 + 一句话说明），互相引流。
