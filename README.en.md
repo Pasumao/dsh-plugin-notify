@@ -1,10 +1,16 @@
-[中文](./README.md) | **English**
+<p align="center">
+  <img src="docs/banner.svg" alt="dsh-notify banner" width="100%">
+</p>
 
 # dsh-notify
 
 ![npm version](https://img.shields.io/npm/v/dsh-notify)
+![npm downloads](https://img.shields.io/npm/dm/dsh-notify)
 ![License](https://img.shields.io/github/license/Pasumao/dsh-plugin-notify)
+![Stars](https://img.shields.io/github/stars/Pasumao/dsh-plugin-notify?style=social)
 ![AI Assisted](https://img.shields.io/badge/AI-Assisted-8A2BE2)
+
+[中文](./README.md) | **English**
 
 **The only dsh plugin with a system tray icon**: when the agent stops running (finished / aborted / error / waiting for your choice / session closed), a native Windows Toast pops up automatically with the body labeled "workspace · session", and a whale icon stays resident in the taskbar tray — switch away from the window during long tasks and one glance at the tray tells you whether it's done.
 
@@ -88,6 +94,7 @@ This plugin is part of the **Pasumao dsh plugin ecosystem**; the published plugi
 | [dsh-plugin-table-zoom](https://www.npmjs.com/package/dsh-plugin-table-zoom) | [GitHub repo](https://github.com/Pasumao/dsh-plugin-table-zoom) | Floating window for long chat tables + one-click Markdown copy |
 | [dsh-plugin-windows-guard](https://www.npmjs.com/package/dsh-plugin-windows-guard) | [GitHub repo](https://github.com/Pasumao/dsh-plugin-windows-guard) | Windows environment guard: rule skills + mojibake detection / dangerous-write interception / encoding diagnosis & repair |
 | [dsh-plugin-workbench](https://www.npmjs.com/package/dsh-plugin-workbench) | [GitHub repo](https://github.com/Pasumao/dsh-plugin-workbench) | VS Code-style file explorer + editable preview |
+| [dsh-plugin-context-trim](https://www.npmjs.com/package/dsh-plugin-context-trim) | [GitHub repo](https://github.com/Pasumao/dsh-plugin-context-trim) | Per-session injection gate: trim skills / tools / prompt sections per session |
 
 > For the other plugins in the series, see [Pasumao · dsh plugins](https://github.com/Pasumao); if you find them useful, a ⭐ on GitHub is appreciated.
 
