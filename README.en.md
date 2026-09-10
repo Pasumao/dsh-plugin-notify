@@ -28,6 +28,7 @@ Zero runtime dependencies, zero build; one `dsh plugin add` command and it's rea
 - **Native Windows Toast notifications**: when the agent stops running (finished / aborted / error / output limit reached / waiting for your choice / session closed), a system notification pops up automatically with the body labeled "workspace · session" — tell at a glance which session finished;
 - **Permanent system tray icon**: a whale icon stays resident in the taskbar tray; the right-click menu opens the dsh web page / quits the background process (competitors explicitly ship no tray — this plugin is the only one in the dsh ecosystem);
 - **Anti-spam**: `rootsOnly` defaults to notifying only root sessions, so subagents won't flood you; `cooldownMs` sets the minimum interval between two notifications of the same type in the same session;
+- **Security hardening**: the notification child process runs with a sanitized environment (variables whose names contain KEY / SECRET / TOKEN / PASSWORD are stripped, preventing credential leaks); on uninstall the tray process is killed and awaited before exit — no leftover processes;
 - **Zero runtime dependencies, zero build**: one `dsh plugin add` command and it's ready to use.
 
 ## Use cases

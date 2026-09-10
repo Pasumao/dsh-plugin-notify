@@ -27,6 +27,7 @@
 - **Windows 原生 Toast 通知**：agent 不再运行时（完成 / 停止 / 出错 / 达到输出上限 / 等你选择 / 会话关闭）自动弹系统通知，正文标注「工作区 · 会话」，一眼知道哪个会话跑完了；
 - **系统托盘常驻图标**：任务栏托盘鲸鱼图标常驻，右键菜单可唤起 dsh web 页面 / 退出后台（竞品均明确不做托盘，本插件是 dsh 生态唯一）；
 - **防刷屏**：`rootsOnly` 默认仅根会话通知，子代理不刷屏；`cooldownMs` 同会话同类型两次通知最小间隔；
+- **安全加固**：弹通知的子进程环境变量经清洗（剔除含 KEY / SECRET / TOKEN / PASSWORD 的变量），托盘进程退出前不残留凭据；卸载时托盘进程 kill 后等待退出再结束，无残留进程；
 - **零运行时依赖、零构建**，`dsh plugin add` 一条命令装完即用。
 
 ## 使用场景
@@ -94,7 +95,6 @@ node scripts/test-harness.mjs   # 弹三条真实 Toast 自测
 | [dsh-plugin-table-zoom](https://www.npmjs.com/package/dsh-plugin-table-zoom) | [GitHub 仓库](https://github.com/Pasumao/dsh-plugin-table-zoom) | 聊天长表格浮窗查看 + 一键复制 Markdown |
 | [dsh-plugin-windows-guard](https://www.npmjs.com/package/dsh-plugin-windows-guard) | [GitHub 仓库](https://github.com/Pasumao/dsh-plugin-windows-guard) | Windows 环境防坑：守则技能 + 乱码检测 / 危险写拦截 / 编码诊断修复 |
 | [dsh-plugin-workbench](https://www.npmjs.com/package/dsh-plugin-workbench) | [GitHub 仓库](https://github.com/Pasumao/dsh-plugin-workbench) | VS Code 风格文件浏览器 + 可编辑预览 |
-
 | [dsh-plugin-context-trim](https://www.npmjs.com/package/dsh-plugin-context-trim) | [GitHub 仓库](https://github.com/Pasumao/dsh-plugin-context-trim) | 会话注入门控：skill / tool / 提示词段落按会话裁剪 |
 > 本系列其余插件见 [Pasumao · dsh 插件](https://github.com/Pasumao)；觉得好用欢迎到 GitHub 点 ⭐。
 
