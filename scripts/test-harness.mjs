@@ -46,8 +46,7 @@ const ctx = {
   },
 }
 
-// tray: false —— 测试只验证通知管道，不启动常驻托盘图标（否则 node 进程不会退出）。
-mod.apply(ctx, { cooldownMs: 0, summaryMaxChars: 40, tray: false })
+mod.apply(ctx, { cooldownMs: 0, summaryMaxChars: 40 })
 
 const emit = (name, ...args) => {
   for (const cb of handlers.get(name) ?? []) cb(...args)

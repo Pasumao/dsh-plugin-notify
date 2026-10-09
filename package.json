@@ -1,7 +1,7 @@
 {
   "name": "dsh-notify",
-  "description": "Native Windows toast + system tray for DeepSeek Harness (dsh): the only dsh plugin with a tray icon. Pops the moment the agent stops running — finished / aborted / error / output limit / waiting for your choice / session closed — body labeled with workspace · session, so you can switch windows during long tasks and glance at the tray instead of watching a spinner. Pure host-side, zero dependencies, zero build.",
-  "version": "0.1.7",
+  "description": "Native Windows toast notifications for DeepSeek Harness (dsh), with a Windows-focused system prompt section. Pops the moment the agent stops running — finished / aborted / error / output limit / waiting for your choice / session closed — body labeled with workspace · session, so you can switch windows during long tasks and catch the toast instead of watching a spinner. Pure host-side, zero dependencies, zero build.",
+  "version": "0.2.0",
   "type": "module",
   "main": "lib/index.js",
   "exports": {
@@ -40,8 +40,6 @@
     "notification",
     "toast",
     "windows-toast",
-    "tray",
-    "system-tray",
     "windows",
     "long-running",
     "agent-monitor"

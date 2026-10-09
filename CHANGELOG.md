@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.2.0] - 2026-09-30
+
+- **移除系统托盘图标功能（整体砍掉）**：删除 `tray` 配置项、`webUrl` 配置项、`scripts/tray.ps1`、`assets/dsh.ico` 及 lib 内全部托盘 spawn / 清理逻辑；插件只保留 Windows 原生 Toast 通知功能；
+- **新增 Windows 环境系统提示段落注入**：经 `inject: ['systemPrompt']` 向 agent 系统提示词注入一段 Windows 环境要点（编码 / 路径 / 进程防坑提示），随总开关 `enabled` 启停；
+- 文档与元数据同步：README（中/英）、banner、npm description / keywords 去除托盘相关内容，兼容性实测更新至 DSH 0.2.0-rc.2，相关插件表移除已弃用的 workbench。
+
 ## [0.1.7] - 2026-09-10
 
 - 安全：spawn 子进程环境变量清洗——剔除变量名含 KEY / SECRET / TOKEN / PASSWORD 的环境变量，防止宿主凭据经子进程泄漏；

@@ -12,7 +12,7 @@
 
 [**中文**](./README.md) | [English](./README.en.md)
 
-**唯一带系统托盘的 Windows 原生通知插件**：agent 不再运行时（完成 / 停止 / 出错 / 等你选择 / 会话关闭）自动弹原生 Toast，正文标注「工作区 · 会话」，任务栏托盘常驻鲸鱼图标——跑长任务时切走窗口，瞄一眼托盘就知道跑完了没。
+**Windows 原生通知插件**：agent 不再运行时（完成 / 停止 / 出错 / 等你选择 / 会话关闭）自动弹原生 Toast，正文标注「工作区 · 会话」——跑长任务时切走窗口，瞄一眼通知就知道跑完了没。
 
 零运行时依赖、零构建，`dsh plugin add` 一条命令装完即用。
 
@@ -20,19 +20,19 @@
 
 ![dsh-notify 实机截图：Windows 原生 Toast 通知](docs/notify-toast.png)
 
-> 真实 Windows Toast 实拍：正文标注「工作区 · 会话」，任务栏托盘鲸鱼图标常驻。
+> 真实 Windows Toast 实拍：正文标注「工作区 · 会话」。
 
 ## 功能
 
 - **Windows 原生 Toast 通知**：agent 不再运行时（完成 / 停止 / 出错 / 达到输出上限 / 等你选择 / 会话关闭）自动弹系统通知，正文标注「工作区 · 会话」，一眼知道哪个会话跑完了；
-- **系统托盘常驻图标**：任务栏托盘鲸鱼图标常驻，右键菜单可唤起 dsh web 页面 / 退出后台（竞品均明确不做托盘，本插件是 dsh 生态唯一）；
 - **防刷屏**：`rootsOnly` 默认仅根会话通知，子代理不刷屏；`cooldownMs` 同会话同类型两次通知最小间隔；
-- **安全加固**：弹通知的子进程环境变量经清洗（剔除含 KEY / SECRET / TOKEN / PASSWORD 的变量），托盘进程退出前不残留凭据；卸载时托盘进程 kill 后等待退出再结束，无残留进程；
+- **安全加固**：弹通知的子进程环境变量经清洗（剔除含 KEY / SECRET / TOKEN / PASSWORD 的变量），不残留凭据与多余进程；
+- **Windows 环境系统提示段落**：向 agent 系统提示词注入一段 Windows 环境要点（编码 / 路径 / 进程防坑提示），随总开关 `enabled` 一并启停；
 - **零运行时依赖、零构建**，`dsh plugin add` 一条命令装完即用。
 
 ## 使用场景
 
-- **跑长任务时切走窗口**：LLM 长生成 / 批处理跑着，切到别的应用，任务结束托盘弹通知，瞄一眼就知道结果；
+- **跑长任务时切走窗口**：LLM 长生成 / 批处理跑着，切到别的应用，任务结束弹通知，瞄一眼就知道结果；
 - **挂机批量任务**：一晚上跑多轮任务，全部结束后收到 Toast，不用守着页面；
 - **会话多开**：同时跑多个工作区会话，通知正文带「工作区 · 会话」标注，不会搞混；
 - **子代理观察**：希望只关注根会话结果时保持 `rootsOnly: true` 默认值，需要观察子代理时再关掉。
@@ -54,9 +54,9 @@ npm install
 # 以 link: 方式挂载进 profile（包名 dsh-notify）
 ```
 
-装完重启 `dsh web`，任务栏出现鲸鱼图标即生效。
+装完重启 `dsh web` 即生效。
 
-> 兼容性：Windows 10/11 · Node ≥ 22.5 · 实测于 DSH `0.1.1-rc.2`。
+> 兼容性：Windows 10/11 · Node ≥ 22.5 · 实测于 DSH `0.2.0-rc.2`。
 
 ## 配置
 
@@ -64,9 +64,9 @@ npm install
 
 | key | 默认 | 说明 |
 |---|---|---|
+| `enabled` | `true` | 插件总开关：同时控制 Toast 通知与系统提示段落注入 |
 | `cooldownMs` | `10000` | 同会话同类型两次通知的最小间隔（毫秒） |
 | `rootsOnly` | `true` | 仅根会话通知，子代理不刷屏 |
-| `tray` | `true` | 托盘图标开关 |
 | `titlePrefix` | `'dsh'` | 通知标题前缀 |
 
 ## 测试
@@ -80,8 +80,7 @@ node scripts/test-harness.mjs   # 弹三条真实 Toast 自测
 - **收不到通知？** 检查 Windows「设置 → 系统 → 通知」是否允许 PowerShell 显示通知，
   以及是否处于专注助手 / 勿扰时段；
 - **只想根会话通知？** 保持默认 `rootsOnly: true`；需要观察子代理时再改为 `false`；
-- **通知太频繁？** 调大 `cooldownMs`（默认 10000ms）即可；
-- **托盘图标不见了？** 重启 dsh web；仍无则检查 `tray: true` 配置项是否被覆盖。
+- **通知太频繁？** 调大 `cooldownMs`（默认 10000ms）即可。
 
 ## 相关插件
 
@@ -94,7 +93,6 @@ node scripts/test-harness.mjs   # 弹三条真实 Toast 自测
 | [dsh-plugin-image-tools](https://www.npmjs.com/package/dsh-plugin-image-tools) | [GitHub 仓库](https://github.com/Pasumao/dsh-plugin-image-tools) | 图片选择卡 + 回复内嵌图片 + 盲模型收图 |
 | [dsh-plugin-table-zoom](https://www.npmjs.com/package/dsh-plugin-table-zoom) | [GitHub 仓库](https://github.com/Pasumao/dsh-plugin-table-zoom) | 聊天长表格浮窗查看 + 一键复制 Markdown |
 | [dsh-plugin-windows-guard](https://www.npmjs.com/package/dsh-plugin-windows-guard) | [GitHub 仓库](https://github.com/Pasumao/dsh-plugin-windows-guard) | Windows 环境防坑：守则技能 + 乱码检测 / 危险写拦截 / 编码诊断修复 |
-| [dsh-plugin-workbench](https://www.npmjs.com/package/dsh-plugin-workbench) | [GitHub 仓库](https://github.com/Pasumao/dsh-plugin-workbench) | VS Code 风格文件浏览器 + 可编辑预览 |
 | [dsh-plugin-context-trim](https://www.npmjs.com/package/dsh-plugin-context-trim) | [GitHub 仓库](https://github.com/Pasumao/dsh-plugin-context-trim) | 会话注入门控：skill / tool / 提示词段落按会话裁剪 |
 > 本系列其余插件见 [Pasumao · dsh 插件](https://github.com/Pasumao)；觉得好用欢迎到 GitHub 点 ⭐。
 

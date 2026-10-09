@@ -1,4 +1,4 @@
-# dsh-notify bundle patch: the toast + system-tray notification plugin.
+# dsh-notify bundle patch: the toast notification plugin (Windows-focused).
 #
 # Applied as ONE insert over the profile root, after dsh-base/dsh-web-app rows.
 # The user's own profile cordis.patch.yml (and any --patch overlays) is applied

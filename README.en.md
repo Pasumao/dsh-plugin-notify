@@ -12,7 +12,7 @@
 
 [中文](./README.md) | **English**
 
-**The only dsh plugin with a system tray icon**: when the agent stops running (finished / aborted / error / waiting for your choice / session closed), a native Windows Toast pops up automatically with the body labeled "workspace · session", and a whale icon stays resident in the taskbar tray — switch away from the window during long tasks and one glance at the tray tells you whether it's done.
+**Native Windows toast notifications for dsh**: when the agent stops running (finished / aborted / error / waiting for your choice / session closed), a native Windows Toast pops up automatically with the body labeled "workspace · session" — switch away from the window during long tasks and one glance at the toast tells you whether it's done.
 
 Zero runtime dependencies, zero build; one `dsh plugin add` command and it's ready to use.
 
@@ -20,20 +20,19 @@ Zero runtime dependencies, zero build; one `dsh plugin add` command and it's rea
 
 ![dsh-notify in action: a native Windows Toast notification](docs/notify-toast.png)
 
-> Real Windows Toast capture: the body is labeled "workspace · session", and the whale icon stays
-> resident in the taskbar tray.
+> Real Windows Toast capture: the body is labeled "workspace · session".
 
 ## Features
 
 - **Native Windows Toast notifications**: when the agent stops running (finished / aborted / error / output limit reached / waiting for your choice / session closed), a system notification pops up automatically with the body labeled "workspace · session" — tell at a glance which session finished;
-- **Permanent system tray icon**: a whale icon stays resident in the taskbar tray; the right-click menu opens the dsh web page / quits the background process (competitors explicitly ship no tray — this plugin is the only one in the dsh ecosystem);
 - **Anti-spam**: `rootsOnly` defaults to notifying only root sessions, so subagents won't flood you; `cooldownMs` sets the minimum interval between two notifications of the same type in the same session;
-- **Security hardening**: the notification child process runs with a sanitized environment (variables whose names contain KEY / SECRET / TOKEN / PASSWORD are stripped, preventing credential leaks); on uninstall the tray process is killed and awaited before exit — no leftover processes;
+- **Security hardening**: the notification child process runs with a sanitized environment (variables whose names contain KEY / SECRET / TOKEN / PASSWORD are stripped, preventing credential leaks) — no leftover credentials or stray processes;
+- **Windows environment system-prompt section**: injects a short Windows environment essentials section (encoding / path / process guardrails) into the agent's system prompt, toggled together with the master `enabled` switch;
 - **Zero runtime dependencies, zero build**: one `dsh plugin add` command and it's ready to use.
 
 ## Use cases
 
-- **Switch windows during long tasks**: while a long LLM generation / batch job runs, switch to another app; when it ends, a tray notification pops up and one glance tells you the result;
+- **Switch windows during long tasks**: while a long LLM generation / batch job runs, switch to another app; when it ends, a toast pops up and one glance tells you the result;
 - **Unattended batch jobs**: run multiple rounds overnight and get a Toast when everything is done — no need to keep watching the page;
 - **Multiple sessions at once**: run several workspace sessions simultaneously; each notification body carries the "workspace · session" label, so nothing gets mixed up;
 - **Watching subagents**: keep the default `rootsOnly: true` when you only care about root-session results, and turn it off when you need to watch subagents.
@@ -55,9 +54,9 @@ npm install
 # Mount into the profile as a link: dependency (package name: dsh-notify)
 ```
 
-After installing, restart `dsh web`; the plugin is active once the whale icon appears in the taskbar.
+After installing, restart `dsh web` and the plugin is active.
 
-> Compatibility: Windows 10/11 · Node ≥ 22.5 · tested on DSH `0.1.1-rc.2`.
+> Compatibility: Windows 10/11 · Node ≥ 22.5 · tested on DSH `0.2.0-rc.2`.
 
 ## Configuration
 
@@ -65,9 +64,9 @@ Override the config in the profile's `cordis.patch.yml` under the id `dsh-plugin
 
 | key | Default | Description |
 |---|---|---|
+| `enabled` | `true` | Master switch: controls both Toast notifications and the system-prompt section injection |
 | `cooldownMs` | `10000` | Minimum interval in milliseconds between two notifications of the same type in the same session |
 | `rootsOnly` | `true` | Notify only root sessions; subagents won't flood you |
-| `tray` | `true` | Enable/disable the tray icon |
 | `titlePrefix` | `'dsh'` | Notification title prefix |
 
 ## Testing
@@ -80,8 +79,7 @@ node scripts/test-harness.mjs   # Fires three real Toast notifications as a self
 
 - **Not receiving notifications?** Check that Windows "Settings → System → Notifications" allows PowerShell to show notifications, and that you are not in Focus Assist / Do Not Disturb mode;
 - **Only root-session notifications?** Keep the default `rootsOnly: true`; change it to `false` when you need to watch subagents;
-- **Notifications too frequent?** Just increase `cooldownMs` (default 10000ms);
-- **Tray icon missing?** Restart dsh web; if it is still gone, check whether the `tray: true` config key was overridden.
+- **Notifications too frequent?** Just increase `cooldownMs` (default 10000ms).
 
 ## Related plugins
 
@@ -94,7 +92,6 @@ This plugin is part of the **Pasumao dsh plugin ecosystem**; the published plugi
 | [dsh-plugin-image-tools](https://www.npmjs.com/package/dsh-plugin-image-tools) | [GitHub repo](https://github.com/Pasumao/dsh-plugin-image-tools) | Image choice cards + inline images in replies + image pickup for blind models |
 | [dsh-plugin-table-zoom](https://www.npmjs.com/package/dsh-plugin-table-zoom) | [GitHub repo](https://github.com/Pasumao/dsh-plugin-table-zoom) | Floating window for long chat tables + one-click Markdown copy |
 | [dsh-plugin-windows-guard](https://www.npmjs.com/package/dsh-plugin-windows-guard) | [GitHub repo](https://github.com/Pasumao/dsh-plugin-windows-guard) | Windows environment guard: rule skills + mojibake detection / dangerous-write interception / encoding diagnosis & repair |
-| [dsh-plugin-workbench](https://www.npmjs.com/package/dsh-plugin-workbench) | [GitHub repo](https://github.com/Pasumao/dsh-plugin-workbench) | VS Code-style file explorer + editable preview |
 | [dsh-plugin-context-trim](https://www.npmjs.com/package/dsh-plugin-context-trim) | [GitHub repo](https://github.com/Pasumao/dsh-plugin-context-trim) | Per-session injection gate: trim skills / tools / prompt sections per session |
 
 > For the other plugins in the series, see [Pasumao · dsh plugins](https://github.com/Pasumao); if you find them useful, a ⭐ on GitHub is appreciated.

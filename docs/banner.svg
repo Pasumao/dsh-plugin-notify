@@ -21,5 +21,5 @@
   </g>
   <text x="212" y="86" font-family="'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif" font-size="17" font-weight="600" letter-spacing="5" fill="#4ADE80">DEEPSEEK HARNESS · DSH PLUGIN</text>
   <text x="212" y="152" font-family="ui-monospace,'Cascadia Code',Consolas,monospace" font-size="46" font-weight="700" fill="#f4f8ff">dsh-notify</text>
-  <text x="212" y="204" font-family="'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif" font-size="22" fill="#9fb3c8">Windows 原生 Toast 通知 · 系统托盘常驻 · agent 停止即知</text>
+  <text x="212" y="204" font-family="'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif" font-size="22" fill="#9fb3c8">Windows 原生 Toast 通知 · agent 停止即知</text>
 </svg>
